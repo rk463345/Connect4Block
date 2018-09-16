@@ -10,8 +10,8 @@ class Block:
 
     def __init__(self, parsed_data, p_transaction = ""):
         """Initializes the Block data structure"""
-        self.pTransaction = p_transaction  #contains the previous transaction hash
-        self.parsedData = parsed_data    #holds the data parsed for it to be hashed
+        self.pTransaction = p_transaction  # contains the previous transaction hash
+        self.parsedData = parsed_data    # holds the data parsed for it to be hashed
         self.jsonData = ""  # put here for testing, most likely will be removed
         self.seed = urandom(19) # random pulled from system call
         self.vHash = "" # holds the verification hash
@@ -63,5 +63,5 @@ class Block:
 
     def return_un_hashed_set(self):
         """returns the list of data that will be hashed together for the final hash before being put onto the chain"""
-        full_set = [self.pTransaction, self.parsedData, self.seed, self.vHash]
+        full_set = [self.pTransaction, self.parsedData, self.seed, self.cTransaction]
         return full_set
