@@ -1,4 +1,4 @@
-# A simple block chain for concept demo
+# A simple block for concept demo
 
 from random import getrandbits
 import hashlib  #needed to be able to hash the data with SHA-256
