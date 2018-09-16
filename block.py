@@ -20,14 +20,21 @@ class Block:
 
     def create_hash(self):
         """checks to make sure data is in type str and then hashes with SHA-256 and returns hash"""
-        if len(self.pTransaction) == "":  # check to see if there is a previous transaction, if not generates a ramdom string to be hashed
-            self.pTransaction = getrandbits(256)    #gets random bits to be hashed in case of being first block
-        if type(self.parsedData) != str: #make sure parsed data is in string form
-            self.jsonData = json.dumps(self.parsedData, sort_keys=True) #makes all pieces of data parsed form file to type str
-        to_hash = str(self.seed) + str(self.pTransaction) + str(self.parsedData) + str(self.parsedData) # creates a string for final hash
-        self.final_hash = hashlib.sha256(str(to_hash).encode('utf-8')).hexdigest()  # creates final hash
-        self.vHash = hashlib.sha256(str(self.parsedData).encode('utf-8')).hexdigest() #hashes the transaction data with sha-256 for a stringencoded with utf-8
-        return hashlib.sha256(str(to_hash).encode('utf-8')).hexdigest()  # creates final hash
+        if len(self.pTransaction) == "":
+            # check to see if there is a previous transaction, if not generates a random string to be hashed
+            self.pTransaction = getrandbits(256)
+            # gets random bits to be hashed in case of being first block
+        if type(self.parsedData) != str:    # make sure parsed data is in string form
+            self.jsonData = json.dumps(self.parsedData, sort_keys=True)
+            # makes all pieces of data parsed form file to type str
+        to_hash = str(self.seed) + str(self.pTransaction) + str(self.parsedData) + str(self.parsedData)
+        # creates a string for final hash
+        self.final_hash = hashlib.sha256(str(to_hash).encode('utf-8')).hexdigest()
+        # creates final hash
+        self.vHash = hashlib.sha256(str(self.parsedData).encode('utf-8')).hexdigest()
+        # hashes the transaction data with sha-256 for a string encoded with utf-8
+        return hashlib.sha256(str(to_hash).encode('utf-8')).hexdigest()
+        # creates and returns final hash
 
     def get_ptransaction(self):
         """returns the hash of the previous transaction"""
@@ -42,7 +49,7 @@ class Block:
         if hashlib.sha256(str(self.parsedData).encode('utf-8')).hexdigest() == self.cTransaction:
             print('success')
         else:
-            False
+            print('contents are not identical')
         #   TODO WRITE THIS FUNCTION
 
     def print_block(self):
@@ -54,4 +61,5 @@ class Block:
         self.verify_block()
 
     def return_un_hashed_set(self):
-        full_set = [self.pTransaction, self.parsedData]
+        full_set = [self.pTransaction, self.parsedData, self.seed, self.vHash]
+        return full_set
