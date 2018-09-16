@@ -53,6 +53,7 @@ class Block:
         #   TODO WRITE THIS FUNCTION
 
     def print_block(self):
+        """prints the data of the block, most likely will be removed"""
         print(self.cTransaction)
         print(self.pTransaction)
         print(self.parsedData)
@@ -61,5 +62,6 @@ class Block:
         self.verify_block()
 
     def return_un_hashed_set(self):
+        """returns the list of data that will be hashed together for the final hash before being put onto the chain"""
         full_set = [self.pTransaction, self.parsedData, self.seed, self.vHash]
         return full_set
