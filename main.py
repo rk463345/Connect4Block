@@ -1,27 +1,46 @@
-from block import Block
-import time
-import os
-#from chain import Chain
+# driver for Connect4Block
+import sys
+import connect4
+import crackhash
+import ledger
+from chain import Chain
 
-print("searching for peers")
-time.sleep(3)
-print("connecting to peers")
-time.sleep(5)
-print("connected, receiving work")
-time.sleep(2)
-print("Ledger and work received")
-block1 = Block()
-block1.add_transaction("my medical records")
-block1.package_block()
-"""while True:
-  data_directory = input("enter the directory of the file to be parsed and added to the blockchain:\n")
-  if os.path.isfile(data_directory):
-    print("valid path")
-    break
-with  open(data_directory) as data:
-  transactions = data.readlines()
-  for line in range(0, len(transactions)):
-    block1.add_transaction(line)
-data.close()"""
-block1.print_block()
 
+def find_patient():
+    connect4.clear()
+    input('fEnter SSN to get patient information:\n')
+
+def add_transaction():
+    data = input("Enter the directory for file to be added to the block chain:\n")
+
+    connect4.create_block(data)
+
+def mine():
+    crackhash.mine_hash()
+
+def main():
+    while True:
+        print("*" * 18)
+        print("What would you like to do?\n"
+             "Add transaction = 1\n"
+            "Mine blocks = 2\n"
+            "Find Data = 3\n"
+            "exit = q")
+        print("*" * 18)
+
+        choice = input("CHOICE = ")
+        if choice == "1":
+            add_transaction()
+        elif choice == "2":
+            mine()
+        elif choice =="2":
+            find_patient()
+        elif choice == "q":
+            print("EXITING")
+            sys.exit()
+        else:
+            connect4.clear()
+            print("INVALID SELECTION, Try again...")
+
+while __name__ == main():
+    main()
