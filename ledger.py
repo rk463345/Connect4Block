@@ -1,79 +1,68 @@
-from xml.dom import minidom # used to parse xml files
 from xml.etree import ElementTree as eletree
-import xml.etree.cElementTree as led # used for creating the ledger in xml
+import os
 
 
-default = ''    # default directory for ledger
-
-
-def get_previous():
-    """returns previous transaction in the ledger"""
-    # TODO write ths to parse ledger to get previous transaction hash
-    previous_transaction = ""
-    index = 1
-    return [previous_transaction, index]
+default = 'ledger.xml'    # default directory for ledger
 
 def check_ledger():
-    """checks the ledger for previous transaction"""
-    # TODO WRITE CHECKING OF LEDGER FOR PREVIOUS TRANSACTION
+    """checks to make sure the ledger exists"""
+    if os.path.exists(default):
+        return True
 
-    return False
-
-def parse_ledger(previous='sha256p'):
-    ledg = eletree.parse(default).getroot()
-
-def get_info(ssn):
-    """returns the data for a given social security number"""
-    # may not use
+def search_ledger(ssn):
+    """searches the ledger based off of a social security number"""
     ledger = eletree.parse(default).getroot()
-    for child in ledger:
-        for grand_child in child:
-            if grand_child.attrib.contains(ssn):
-                return child.attrib
-
-def handle_ledger(ssn):
-    ledger = eletree.parse(default).getroot()
-    for patient in ledger.findall('country'):
-        if patient.find('ssn').text == ssn:
-            first_name = patient.find('fname').text
-            last_name = patient.find('lname').text
-            visit_date = patient.find('vdate').text
-            treatment = patient.find("treatment").text
-            rx = patient.find('rx').text
+    for patient in ledger.findall('SSN'):
+        if patient.find('SSN').text == ssn:
+            first_name = patient.find('FirstName').text
+            last_name = patient.find('LastName').text
+            visit_date = patient.find('DOB').text
+            treatment = patient.find("Treatment").text
+            rx = patient.find('Prescription').text
+            diag = patient.find('Diagnosis').text
+            return [first_name, last_name, visit_date, treatment, rx, diag]
 
 def handle_process():
-    return 0
+    """gets the process ID"""
+    return os.getpid()
 
 def handle_hash():
-    ledger = eletree.parse(default).getroot()
-    return ledger[-1][2].text
-
-def handle_sha256p():
+    """returns the previous has from the ledger"""
     ledger = eletree.parse(default).getroot()
     return ledger[-1][3].text
 
-def handle_fname():
+def handle_sha256p():
+    """returns the previous hash from the ledger"""
+    ledger = eletree.parse(default).getroot()
+    return ledger[-1][2].text
+
+def build_ledger():
+    """build initial ledger file"""
+    root = eletree.Element('BlockLedger')
+    ledger = eletree.ElementTree(root)
+    ledger.write(default)
     return 0
 
-def handle_lname():
+def add_to_ledger(ID,chash, phash, ssn, fname, dob, tx, rx, pid, lname, diag):
+    """adds new items to the ledger"""
+    if os.path.exists(default):
+        ledger = eletree.parse(default)
+        ledger_root = ledger.getroot()
+        child = eletree.SubElement(ledger_root, 'BlockRecord')
+        eletree.SubElement(child, "BlockID").set("BlockID", ID)
+        eletree.SubElement(child, "ProcessID").set("ProcessID", pid)
+        eletree.SubElement(child, "PreviousHash").set("PreviousHash", phash)
+        eletree.SubElement(child, "BlockHash").set("BlockHash", chash)
+        eletree.SubElement(child, "DOB").set("DOB", dob)
+        eletree.SubElement(child, "FirstName").set("FirstName", fname)
+        eletree.SubElement(child, "LastName").set("LastName", lname)
+        eletree.SubElement(child, "SSN").set("SSN", ssn)
+        eletree.SubElement(child, "Diagnosis").set("Diagnosis", diag)
+        eletree.SubElement(child, "Prescription").set("Prescription", rx)
+        eletree.SubElement(child, "Treatment").set("Treatment", tx)
+        ledger.write(default)
+    else:
+        build = build_ledger()
+        if build == 0:
+            add_to_ledger(ID, chash, phash, fname, lname, ssn, tx, rx, pid, dob, diag)
     return 0
-
-def handle_rx():
-    return 0
-
-def handle_treat():
-    return 0
-
-def handle_ssn():
-    return 0
-
-def handle_date():
-    return 0
-
-def handle_time():
-    return 0
-
-def handle_uuid():
-    return 0
-
-#todo write the xml add and creation functions
